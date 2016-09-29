@@ -30,3 +30,20 @@ echo"===========================================================================
     }
   }
 //
+
+//                    SWITCH CASE TO DEAL WITH USERINPUT
+switch ($userInput) {
+  case "d": {
+    deposit();
+    break;
+  }
+  case "w": {
+    withdrawl();
+    break;
+  }
+  default: {
+    userInputCheck();
+    break;
+  }
+}
+//
