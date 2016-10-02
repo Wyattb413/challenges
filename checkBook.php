@@ -7,6 +7,7 @@ echo"===========================================================================
 //                     VARIBLE DEFINITION
   $depositObject = [];
   $userInput = "";
+  $balance = 0;
 
 //                     FUNCTION DEFINITIONS
   //TRANSACTION PROMPT
@@ -14,21 +15,7 @@ echo"===========================================================================
     {
       fwrite(STDOUT, "Would you like to Deposit (d) or Withdrawl (w)?" . PHP_EOL);
       $userInput = trim(fgets(STDIN));
-  //SWITCH CASE TO DEAL WITH TRANSACTION PROMPT INPUT
-      switch ($userInput) {
-        case "d": {
-          depositPrompt();
-          break;
-        }
-        case "w": {
-          withdrawl();
-          break;
-        }
-        default: {
-          userInputCheck();
-          break;
-        }
-      }
+      userInputCheck($userInput);
     }
 
   //DEPOSIT FUNCTION DEFINITIONS
@@ -46,17 +33,39 @@ echo"===========================================================================
       }
     }
 
-    function deposit($depositObject) {
+    function deposit($depositObject, $balance = 0) {
       fwrite(STDOUT, "You have deposited $" . $depositObject['depositAmount'] . PHP_EOL);
+      $balance += $depositObject['depositAmount'];
+      fwrite(STDOUT, "You have $" . $balance . " in your account. Would you like to make another transaction? (Y/N)" . PHP_EOL);
+      $userInput = trim(fgets(STDIN));
+      (transactionPrompt($userInput));
     }
 
-    function withdrawl() {
+  //WITHDRAWL FUNCTION DEFINITION
+    function withdrawlPrompt() {
       fwrite(STDOUT, "How much would you like to withdrawl?" . PHP_EOL);
     }
 
-    function userInputCheck() {
-      do {
-        fwrite(STDOUT, "Please enter either 'd' or 'w', thank you!" . PHP_EOL);
-        $userInput = trim(fgets(STDIN));
-      } while ($userInput != "d" && $userInput != "w");
+    function userInputCheck($userInput) {
+  //SWITCH CASE TO DEAL WITH TRANSACTION PROMPT INPUT
+      switch ($userInput) {
+        case "d": {
+          depositPrompt();
+          break;
+        }
+        case "w": {
+          withdrawlPrompt();
+          break;
+        }
+        default: {
+          do {
+              fwrite(STDOUT, "Please enter either 'd' or 'w', thank you!" . PHP_EOL);
+              $userInput = trim(fgets(STDIN));
+            } while ($userInput != "d" && $userInput != "w");
+          userInputCheck($userInput);
+          break;
+        }
+      }
     }
+
+    transactionPrompt();
