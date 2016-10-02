@@ -14,12 +14,13 @@ echo"===========================================================================
     function transactionPrompt()
     {
       fwrite(STDOUT, "Would you like to Deposit (d) or Withdrawl (w)?" . PHP_EOL);
-      $userInput = trim(fgets(STDIN));
+      $userInput = trim(strtolower(fgets(STDIN)));
       userInputCheck($userInput);
     }
 
   //DEPOSIT FUNCTION DEFINITIONS
-    function depositPrompt() {
+    function depositPrompt()
+    {
       fwrite(STDOUT, "How much would you like to deposit?" . PHP_EOL);
       $depositAmount = intval(trim(fgets(STDIN)));
       fwrite(STDOUT, "Are you sure you would like to deposit $" . $depositAmount . "?" . " (Y/N)". PHP_EOL);
@@ -33,21 +34,38 @@ echo"===========================================================================
       }
     }
 
-    function deposit($depositObject, $balance = 0) {
+    function deposit($depositObject, $balance = 0)
+     {
       fwrite(STDOUT, "You have deposited $" . $depositObject['depositAmount'] . PHP_EOL);
       $balance += $depositObject['depositAmount'];
       fwrite(STDOUT, "You have $" . $balance . " in your account. Would you like to make another transaction? (Y/N)" . PHP_EOL);
-      $userInput = trim(fgets(STDIN));
-      (transactionPrompt($userInput));
+      $userInput = trim(strtolower(fgets(STDIN)));
+      if ($userInput == "y") {
+        transactionPrompt();
+      } else if ($userInput == "n") {
+        goodbye();
+      } else {
+        do {
+            fwrite(STDOUT, "Please enter either 'Y' or 'N', thank you!" . PHP_EOL);
+            $userInput = trim(strtolower(fgets(STDIN)));
+          } while ($userInput != "y" && $userInput != "n");
+          if ($userInput == "y") {
+            transactionPrompt();
+          } else if ($userInput == "n") {
+            goodbye();
+          }
+      }
     }
 
   //WITHDRAWL FUNCTION DEFINITION
-    function withdrawlPrompt() {
+    function withdrawlPrompt()
+    {
       fwrite(STDOUT, "How much would you like to withdrawl?" . PHP_EOL);
     }
 
-    function userInputCheck($userInput) {
-  //SWITCH CASE TO DEAL WITH TRANSACTION PROMPT INPUT
+    function userInputCheck($userInput)
+    {
+    //SWITCH CASE TO DEAL WITH TRANSACTION PROMPT INPUT
       switch ($userInput) {
         case "d": {
           depositPrompt();
@@ -60,9 +78,34 @@ echo"===========================================================================
         default: {
           do {
               fwrite(STDOUT, "Please enter either 'd' or 'w', thank you!" . PHP_EOL);
-              $userInput = trim(fgets(STDIN));
+              $userInput = trim(strtolower(fgets(STDIN)));
             } while ($userInput != "d" && $userInput != "w");
           userInputCheck($userInput);
+          break;
+        }
+      }
+    }
+
+  //GOODBYE FUNCTION
+    function goodBye($userInput = NULL)
+    {
+      fwrite(STDOUT, "Are you sure you would like to disconnect? (Y/N)" . PHP_EOL);
+      $userInput = trim(strtolower(fgets(STDIN)));
+      switch ($userInput) {
+        case "y": {
+          fwrite(STDOUT, "Thank you for using Wyatt's CheckBook Application, have a nice day!" .PHP_EOL);
+          break;
+        }
+        case "n": {
+          transactionPrompt();
+          break;
+        }
+        default: {
+          do {
+              fwrite(STDOUT, "Please enter either 'Y' or 'N', thank you!" . PHP_EOL);
+              $userInput = trim(strtolower(fgets(STDIN)));
+            } while ($userInput != "y" && $userInput != "n");
+          goodBye($userInput);
           break;
         }
       }
