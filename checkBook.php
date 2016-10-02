@@ -11,15 +11,15 @@ echo"===========================================================================
 
 //                     FUNCTION DEFINITIONS
   //TRANSACTION PROMPT
-    function transactionPrompt()
+    function transactionPrompt($balance  = 0)
     {
       fwrite(STDOUT, "Would you like to Deposit (d) or Withdrawl (w)?" . PHP_EOL);
       $userInput = trim(strtolower(fgets(STDIN)));
-      userInputCheck($userInput);
+      userInputCheck($userInput, $balance);
     }
 
   //DEPOSIT FUNCTION DEFINITIONS
-    function depositPrompt()
+    function depositPrompt($balance)
     {
       fwrite(STDOUT, "How much would you like to deposit?" . PHP_EOL);
       $depositAmount = intval(trim(fgets(STDIN)));
@@ -28,9 +28,9 @@ echo"===========================================================================
       if ($depositConformation == "y") {
         $depositObject ['depositAmount'] = $depositAmount;
         $depositObject ['depositConformation'] = $depositConformation;
-        deposit($depositObject);
+        deposit($depositObject, $balance);
       } else if ($depositConformation == "n") {
-        transactionPrompt();
+        transactionPrompt($balance);
       }
     }
 
@@ -41,7 +41,7 @@ echo"===========================================================================
       fwrite(STDOUT, "You have $" . $balance . " in your account. Would you like to make another transaction? (Y/N)" . PHP_EOL);
       $userInput = trim(strtolower(fgets(STDIN)));
       if ($userInput == "y") {
-        transactionPrompt();
+        transactionPrompt($balance);
       } else if ($userInput == "n") {
         goodbye();
       } else {
@@ -63,12 +63,12 @@ echo"===========================================================================
       fwrite(STDOUT, "How much would you like to withdrawl?" . PHP_EOL);
     }
 
-    function userInputCheck($userInput)
+    function userInputCheck($userInput, $balance)
     {
     //SWITCH CASE TO DEAL WITH TRANSACTION PROMPT INPUT
       switch ($userInput) {
         case "d": {
-          depositPrompt();
+          depositPrompt($balance);
           break;
         }
         case "w": {
