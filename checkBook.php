@@ -5,7 +5,7 @@ echo"------------------Hello! Welcome to Wyatt's CheckBook Application----------
 echo"===================================================================================" . PHP_EOL;
 
 //                     VARIBLE DEFINITION
-  $depositObject = [];
+  $transactionObject = [];
   $userInput = "";
   $balance = 0;
 
@@ -27,7 +27,7 @@ echo"===========================================================================
           break;
         }
         case "w": {
-          withdrawlPrompt();
+          withdrawlPrompt($balance);
           break;
         }
         case "b": {
@@ -39,7 +39,7 @@ echo"===========================================================================
           do {
             fwrite(STDOUT, "Please enter either 'd' or 'w', thank you!" . PHP_EOL);
             $userInput = trim(strtolower(fgets(STDIN)));
-          } while ($userInput != "d" && $userInput != "w");
+          } while ($userInput != "d" && $userInput != "w" && $userInput != "b");
           userInputCheck($userInput);
           break;
         }
@@ -52,20 +52,47 @@ echo"===========================================================================
       fwrite(STDOUT, "How much would you like to deposit?" . PHP_EOL);
       $depositAmount = intval(trim(fgets(STDIN)));
       fwrite(STDOUT, "Are you sure you would like to deposit $" . $depositAmount . "?" . " (Y/N)". PHP_EOL);
-      $depositConformation = trim(strtolower((fgets(STDIN))));
+      $depositConformation = trim(strtolower(fgets(STDIN)));
       if ($depositConformation == "y") {
-        $depositObject ['depositAmount'] = $depositAmount;
-        $depositObject ['depositConformation'] = $depositConformation;
-        deposit($depositObject, $balance);
+        $transactionObject ['depositAmount'] = $depositAmount;
+        // $transactionObject ['depositConformation'] = $depositConformation;
+        deposit($transactionObject, $balance);
       } else if ($depositConformation == "n") {
         transactionPrompt($balance);
       }
     }
 
-    function deposit($depositObject, $balance = 0)
+    function deposit($transactionObject, $balance = 0)
      {
-      fwrite(STDOUT, "You have deposited $" . $depositObject['depositAmount'] . PHP_EOL);
-      $balance += $depositObject['depositAmount'];
+      fwrite(STDOUT, "You have deposited $" . $transactionObject['depositAmount'] . PHP_EOL);
+      $balance += $transactionObject['depositAmount'];
+      additionalTransactionHandler($balance);
+    }
+
+  //WITHDRAWL FUNCTION DEFINITION
+    function withdrawlPrompt($balance)
+    {
+      fwrite(STDOUT, "How much would you like to withdrawl?" . PHP_EOL);
+      $withdrawlAmount = intval(trim(fgets(STDIN)));
+      fwrite(STDOUT, "Are you sure you would like to withdrawl $" . $withdrawlAmount . "?" . " (Y/N)" . PHP_EOL);
+      $withdrawlConformation = trim(strtolower(fgets(STDIN)));
+      if ($withdrawlConformation == "y") {
+        $transactionObject ['withdrawlAmount'] = $withdrawlAmount;
+        // $transactionObject ['$withdrawlConformation'] = $withdrawlConformation;
+        withdrawl($transactionObject, $balance);
+      } else if ($withdrawlConformation == "n") {
+        transactionPrompt($balance);
+      }
+    }
+
+    function withdrawl($transactionObject, $balance = 0)
+     {
+      fwrite(STDOUT, "You have deposited $" . $transactionObject['withdrawlAmount'] . PHP_EOL);
+      $balance -= $transactionObject['withdrawlAmount'];
+      additionalTransactionHandler($balance);
+    }
+
+    function additionalTransactionHandler ($balance) {
       fwrite(STDOUT, "You have $" . $balance . " in your account. Would you like to make another transaction? (Y/N)" . PHP_EOL);
       $userInput = trim(strtolower(fgets(STDIN)));
       if ($userInput == "y") {
@@ -84,13 +111,6 @@ echo"===========================================================================
           }
       }
     }
-
-  //WITHDRAWL FUNCTION DEFINITION
-    function withdrawlPrompt()
-    {
-      fwrite(STDOUT, "How much would you like to withdrawl?" . PHP_EOL);
-    }
-
 
   //GOODBYE FUNCTION
     function goodBye($userInput = NULL)
