@@ -13,9 +13,37 @@ echo"===========================================================================
   //TRANSACTION PROMPT
     function transactionPrompt($balance  = 0)
     {
-      fwrite(STDOUT, "Would you like to Deposit (d) or Withdrawl (w)?" . PHP_EOL);
+      fwrite(STDOUT, "Would you like to Deposit (d), Withdrawl (w), or Check Your Balance (b)?" . PHP_EOL);
       $userInput = trim(strtolower(fgets(STDIN)));
       userInputCheck($userInput, $balance);
+    }
+
+    function userInputCheck($userInput, $balance)
+    {
+      //SWITCH CASE TO DEAL WITH TRANSACTION PROMPT INPUT
+      switch ($userInput) {
+        case "d": {
+          depositPrompt($balance);
+          break;
+        }
+        case "w": {
+          withdrawlPrompt();
+          break;
+        }
+        case "b": {
+          fwrite(STDOUT, "Your current balance is: $" . $balance . PHP_EOL);
+          transactionPrompt($balance);
+          break;
+        }
+        default: {
+          do {
+            fwrite(STDOUT, "Please enter either 'd' or 'w', thank you!" . PHP_EOL);
+            $userInput = trim(strtolower(fgets(STDIN)));
+          } while ($userInput != "d" && $userInput != "w");
+          userInputCheck($userInput);
+          break;
+        }
+      }
     }
 
   //DEPOSIT FUNCTION DEFINITIONS
@@ -63,28 +91,6 @@ echo"===========================================================================
       fwrite(STDOUT, "How much would you like to withdrawl?" . PHP_EOL);
     }
 
-    function userInputCheck($userInput, $balance)
-    {
-    //SWITCH CASE TO DEAL WITH TRANSACTION PROMPT INPUT
-      switch ($userInput) {
-        case "d": {
-          depositPrompt($balance);
-          break;
-        }
-        case "w": {
-          withdrawlPrompt();
-          break;
-        }
-        default: {
-          do {
-              fwrite(STDOUT, "Please enter either 'd' or 'w', thank you!" . PHP_EOL);
-              $userInput = trim(strtolower(fgets(STDIN)));
-            } while ($userInput != "d" && $userInput != "w");
-          userInputCheck($userInput);
-          break;
-        }
-      }
-    }
 
   //GOODBYE FUNCTION
     function goodBye($userInput = NULL)
