@@ -37,10 +37,10 @@ echo"===========================================================================
         }
         default: {
           do {
-            fwrite(STDOUT, "Please enter either 'd' or 'w', thank you!" . PHP_EOL);
+            fwrite(STDOUT, "Please enter either 'd', 'w', or 'b' thank you!" . PHP_EOL);
             $userInput = trim(strtolower(fgets(STDIN)));
           } while ($userInput != "d" && $userInput != "w" && $userInput != "b");
-          userInputCheck($userInput);
+          userInputCheck($userInput, $balance);
           break;
         }
       }
@@ -59,6 +59,11 @@ echo"===========================================================================
         deposit($transactionObject, $balance);
       } else if ($depositConformation == "n") {
         transactionPrompt($balance);
+      } else {
+        do {
+            fwrite(STDOUT, "Please enter either 'Y' or 'N', thank you!" . PHP_EOL);
+            $userInput = trim(strtolower(fgets(STDIN)));
+          } while ($userInput != "y" && $userInput != "n");
       }
     }
 
@@ -82,12 +87,17 @@ echo"===========================================================================
         withdrawl($transactionObject, $balance);
       } else if ($withdrawlConformation == "n") {
         transactionPrompt($balance);
+      } else {
+        do {
+            fwrite(STDOUT, "Please enter either 'Y' or 'N', thank you!" . PHP_EOL);
+            $userInput = trim(strtolower(fgets(STDIN)));
+          } while ($userInput != "y" && $userInput != "n");
       }
     }
 
     function withdrawl($transactionObject, $balance = 0)
      {
-      fwrite(STDOUT, "You have deposited $" . $transactionObject['withdrawlAmount'] . PHP_EOL);
+      fwrite(STDOUT, "You have withdrawn $" . $transactionObject['withdrawlAmount'] . PHP_EOL);
       $balance -= $transactionObject['withdrawlAmount'];
       additionalTransactionHandler($balance);
     }
@@ -126,6 +136,11 @@ echo"===========================================================================
           transactionPrompt();
           break;
         }
+        case "b": {
+          fwrite(STDOUT, "Your current balance is: $" . $balance . PHP_EOL);
+          transactionPrompt($balance);
+          break;
+        }
         default: {
           do {
               fwrite(STDOUT, "Please enter either 'Y' or 'N', thank you!" . PHP_EOL);
@@ -138,3 +153,5 @@ echo"===========================================================================
     }
 
     transactionPrompt();
+
+//summation of all transactions instead of adding and subtracting from $balance
